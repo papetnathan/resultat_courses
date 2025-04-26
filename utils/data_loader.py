@@ -99,7 +99,7 @@ def load_recent_data():
     date_course = courses_url['Date'].max()
     last_day = str(date_course.day).zfill(2)
     last_month = str(date_course.month).zfill(2)
-    last_annee = str(date_course.year)
+    last_annee = date_course.year
 
     if last_annee == today_annee :
         annees = [last_annee]
