@@ -1,7 +1,7 @@
-- si plus de deux éditions
-    - evolution du nombre de participants sur toutes les années
-    - evolution du temps moyen au cours du temps
-    - superposer les graphiques de densité de temps avec de la transparence (a voir si pas trop lourd)
+- boxplot des temps par catégorie
+- juste au dessus du df ajouter un moyen de pouvoir rentrer un temps ou une allure et ca nous donne le classement qu'on aurait eu (ou chatbot)
+- enlever le * a la fin des noms de clubs
+- deployer directement sur streamlit commuity cloud (plus rapide)
     
 
 IDEES AUTRES PROJETS :

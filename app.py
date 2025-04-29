@@ -91,6 +91,6 @@ if st.session_state.metadata and st.session_state.data is not None:
     if fig:
         st.plotly_chart(fig, use_container_width=True)
 
-    filtered_data = filtered_data[['nom_athlete', 'categorie', 'club', 'h_duration']]
-    filtered_data.columns = ['Nom Prénom', 'Catégorie', 'Club', 'Temps']
+    filtered_data = filtered_data[['nom_athlete', 'categorie', 'club', 'h_duration','allure']]
+    filtered_data.columns = ['Nom Prénom', 'Catégorie', 'Club', 'Temps','Allure']
     st.dataframe(filtered_data, use_container_width=True)

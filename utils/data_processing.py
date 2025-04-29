@@ -26,14 +26,23 @@ def define_categories():
     return categoriesF + categoriesM
 
 def extract_athletes_data(rows):
-    ''' Extraction des données de l'athlete'''
+    ''' Extraction des données de l'athlète '''
     categories = define_categories()
     re_cat = re.compile(r"[A-Z]{3}(?=<)|[A-Z]\d[A-Z]")
+    re_distance = re.compile(r"(\d+)\s?m")  # Regex pour trouver la distance en mètres
+
     athletes_results = []
-    
+    current_distance = None  # Pour mémoriser la distance en cours
+
     for row in rows:
+        # Détection des subheaders pour récupérer la distance
+        if "subheaders" in str(row):
+            subheader_text = row.text.strip()
+            match = re_distance.search(subheader_text)
+            if match:
+                current_distance = int(match.group(1))  # Stocker la distance en entier
+
         columns = row.find_all('td')
-        
         if len(columns) > 5:
             nom_athlete = columns[4].text.strip() if len(columns) > 4 else ''
             temps = columns[2].text.strip().split(" ")[0] if len(columns) > 2 else ''
@@ -46,21 +55,22 @@ def extract_athletes_data(rows):
             epreuve = None
             epreuve_link = row.find('a', href=re.compile(r"frmepreuve="))
             if epreuve_link and 'href' in epreuve_link.attrs:
-                # Extraction du paramètre frmepreuve de l'URL
                 href = epreuve_link.attrs['href']
                 epreuve_match = re.search(r"frmepreuve=([^&]+)", href)
                 if epreuve_match:
-                    epreuve = unquote(epreuve_match.group(1))  # Décoder l'URL et extraire l'épreuve
-                
+                    epreuve = unquote(epreuve_match.group(1))
+
             athletes_results.append({
                 'nom_athlete': nom_athlete,
                 'temps': temps,
                 'categorie': categorie,
                 'club': club,
-                'epreuve': epreuve  # Ajout de l'épreuve dans les résultats
+                'epreuve': epreuve,
+                'distance_m': current_distance  # On ajoute la distance ici
             })
-    
+
     return pd.DataFrame(athletes_results)
+
 
 
 def convert_chrono(x):
@@ -81,6 +91,16 @@ def split_nom_prenom(athlete):
     prenom = ' '.join([word for word in words if not word.isupper()]).split('(')[0].strip()
     return nom, prenom
 
+def convert_allure_to_decimal(allure_str):
+    if pd.isna(allure_str):
+        return None
+    try:
+        time_part = allure_str.replace("/km", "")
+        minutes, seconds = map(int, time_part.split(":"))
+        return minutes + seconds / 60
+    except:
+        return None
+
 def process_athlete_data(rows):
     '''Data prep sur le dataframe des resultats'''
     data = extract_athletes_data(rows)
@@ -94,6 +114,9 @@ def process_athlete_data(rows):
     data['time_gap'] = (data["temps"] - data['temps'].iloc[0]).dt.total_seconds()
     data['duration'] = data['time_delta'].dt.total_seconds()
     data['h_duration'] = data['duration'].apply(lambda x: str(pd.to_timedelta(x, unit="s")).split(' ')[-1] if pd.notna(x) else None)
+    data['allure'] = data['duration'] / 60 / (data['distance_m'] / 1000)
+    data['allure'] = data['allure'].apply(lambda x: f"{int(x)}:{int((x % 1) * 60):02d}/km" if pd.notnull(x) else None)
+    data["allure_decimal"] = data["allure"].apply(convert_allure_to_decimal)
     data['club'] = data['club'].str.upper()
     data['cat'] = data["categorie"].str.slice(0,2)
     data = data.set_index('classement')
