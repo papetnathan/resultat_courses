@@ -76,8 +76,13 @@ def extract_metadata(page):
         
         label = re.search("(?<=Label ).*(?<!')", sous_titre)
         label = label.group(0) if label else "Aucun"
+
+        subheader = page.find('div', {'class': "subheaders"})
+        subheader_text = subheader.text if subheader else ""
+        heure = re.search(r"\d{1,2}:\d{2}", subheader_text)
+        heure = heure.group(0).split(":")[0] if heure else "Non trouvée"
         
-        return {"nom": nom, "date": date, "lieu": lieu, "label": label, "dept": dept}
+        return {"nom": nom, "date": date, "lieu": lieu, "label": label, "dept": dept, "heure": heure}
     
     except Exception as e:
         return str(e)

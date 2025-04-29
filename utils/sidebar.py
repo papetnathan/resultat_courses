@@ -10,7 +10,7 @@ def display_sidebar(metadata, data):
     coord_course = get_coordinates(metadata)
     if coord_course is not None:
         lat, lon = coord_course.iloc[0]['lat'], coord_course.iloc[0]['lon']
-        weather_info = get_weather_data(lat, lon, metadata['date'])
+        weather_info = get_weather_data(lat, lon, metadata['date'], metadata['heure'])
     else:
         weather_info = None
 
@@ -27,6 +27,7 @@ def display_sidebar(metadata, data):
                     <p style="font-size: 16px;"><strong>🌤️ Météo:</strong> {weather_info['description']}</p>
                     <p style="font-size: 16px;"><strong>🌡️ Température:</strong> {weather_info['temperature']}°C</p>
                     <p style="font-size: 16px;"><strong>💨 Vent:</strong> {weather_info['wind_speed']} km/h</p>
+                    <p style="font-size: 16px;"><strong>💧 Humidité:</strong> {weather_info['humidity']} %</p>
                 </div>
             </div>
             """

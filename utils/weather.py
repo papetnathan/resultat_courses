@@ -1,7 +1,7 @@
 import requests
 import datetime
 
-def get_weather_data(lat, lon, date):
+def get_weather_data(lat, lon, date, heure):
     ''' Récupère les données météorologiques historiques pour une latitude, une longitude et une date données '''
 
     try:
@@ -18,7 +18,7 @@ def get_weather_data(lat, lon, date):
         "longitude": lon,
         "start_date": event_date,
         "end_date": event_date,
-        "hourly": "temperature_2m,weathercode,windspeed_10m",
+        "hourly": "temperature_2m,weathercode,windspeed_10m,relativehumidity_2m",
         "timezone": "Europe/Paris"
     }
 
@@ -29,11 +29,12 @@ def get_weather_data(lat, lon, date):
 
         if "hourly" in data and "temperature_2m" in data["hourly"] and "weathercode" in data["hourly"] and "windspeed_10m" in data["hourly"]:
             # Récupération des données météorologiques à 10h (heure la plus fréquente de course)
-            temperature = data["hourly"]["temperature_2m"][10]  
-            weather_code = data["hourly"]["weathercode"][10]
-            wind_speed = data["hourly"]["windspeed_10m"][10]
+            temperature = data["hourly"]["temperature_2m"][int(heure)]  
+            weather_code = data["hourly"]["weathercode"][int(heure)]
+            wind_speed = data["hourly"]["windspeed_10m"][int(heure)]
+            humidity = data["hourly"]["relativehumidity_2m"][int(heure)]
             description = map_weather_code(weather_code)
-            return {"temperature": temperature, "description": description, "wind_speed": wind_speed}
+            return {"temperature": temperature, "description": description, "wind_speed": wind_speed, "humidity": humidity}
         else:
             return None
     

@@ -1,8 +1,8 @@
 - boxplot des temps par catégorie
 - juste au dessus du df ajouter un moyen de pouvoir rentrer un temps ou une allure et ca nous donne le classement qu'on aurait eu (ou chatbot)
-- enlever le * a la fin des noms de clubs
-- deployer directement sur streamlit commuity cloud (plus rapide)
-    
+- enlever le * a la fin des noms de clubs    
+
+
 
 IDEES AUTRES PROJETS :
 - gestion des records de club
