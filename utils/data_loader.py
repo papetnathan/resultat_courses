@@ -80,7 +80,7 @@ def extract_metadata(page):
         subheader = page.find('div', {'class': "subheaders"})
         subheader_text = subheader.text if subheader else ""
         heure = re.search(r"\d{1,2}:\d{2}", subheader_text)
-        heure = heure.group(0).split(":")[0] if heure else "Non trouvée"
+        heure = heure.group(0).split(":")[0] if heure else "10"
         
         return {"nom": nom, "date": date, "lieu": lieu, "label": label, "dept": dept, "heure": heure}
     

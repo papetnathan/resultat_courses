@@ -71,8 +71,6 @@ def extract_athletes_data(rows):
 
     return pd.DataFrame(athletes_results)
 
-
-
 def convert_chrono(x):
     '''Formattage du temps de course'''
     x = str(x)
@@ -117,7 +115,7 @@ def process_athlete_data(rows):
     data['allure'] = data['duration'] / 60 / (data['distance_m'] / 1000)
     data['allure'] = data['allure'].apply(lambda x: f"{int(x)}:{int((x % 1) * 60):02d}/km" if pd.notnull(x) else None)
     data["allure_decimal"] = data["allure"].apply(convert_allure_to_decimal)
-    data['club'] = data['club'].str.upper()
+    data['club'] = data['club'].str.upper().str.strip().str.replace(r'\*+$', '', regex=True)
     data['cat'] = data["categorie"].str.slice(0,2)
     data = data.set_index('classement')
     return data.drop(columns=["temps", "time_delta"], errors='ignore')
@@ -169,4 +167,3 @@ def nettoyer_nom_course(nom_course):
     nom_course = nom_course.capitalize()
     
     return nom_course
-
