@@ -37,42 +37,33 @@ def calculate_gender_metrics(data):
         "pace_femmes_str": pace_femmes_str
     }
 
-def display_general_metrics(filtered_data, data):
+def display_general_metrics(data):
     ''' Affichage des metrics dans 3 colonnes '''
-    if len(filtered_data) > 1:
-        gender_metrics = calculate_gender_metrics(filtered_data)
-        st.session_state.nb_hommes = gender_metrics["nb_hommes"]
-        st.session_state.nb_femmes = gender_metrics["nb_femmes"]
-        st.session_state.avg_time_hommes_str = gender_metrics["avg_time_hommes"]
-        st.session_state.avg_time_femmes_str = gender_metrics["avg_time_femmes"]
-        st.session_state.pace_hommes_str = gender_metrics["pace_hommes_str"]
-        st.session_state.pace_femmes_str = gender_metrics["pace_femmes_str"]
-        data_donut = filtered_data
-    else:
-        data_donut = data
+    gender_metrics = calculate_gender_metrics(data)
+    data_donut = data
 
+    # Enregistrer les valeurs calculées dans le session_state
+    st.session_state.nb_hommes = gender_metrics["nb_hommes"]
+    st.session_state.nb_femmes = gender_metrics["nb_femmes"]
+    st.session_state.avg_time_hommes_str = gender_metrics["avg_time_hommes"]
+    st.session_state.avg_time_femmes_str = gender_metrics["avg_time_femmes"]
+    st.session_state.pace_hommes_str = gender_metrics["pace_hommes_str"]
+    st.session_state.pace_femmes_str = gender_metrics["pace_femmes_str"]
+
+    # Affichage des résultats dans les colonnes
     st.markdown("<br>", unsafe_allow_html=True)
-
     col1, col2, col3 = st.columns([1, 1, 1])
 
     with col1:
         st.image("assets/homme.png", width=80)
         st.metric(label="Nombre d'hommes", value=st.session_state.nb_hommes)
         st.markdown(
-            """
-            <div style=" font-size: 14px; margin-bottom: 4px;">
-                Temps moyen hommes
-            </div>
-            """,
+            "<div style='font-size: 14px; margin-bottom: 4px;'>Temps moyen hommes</div>",
             unsafe_allow_html=True
         )
         st.markdown(
-            f"""
-            <div style="font-size: 24px; font-weight: bold;">
-                {st.session_state.avg_time_hommes_str}
-                <span style="font-size: 16px; color: gray;">({st.session_state.pace_hommes_str})</span>
-            </div>
-            """,
+            f"<div style='font-size: 24px; font-weight: bold;'>{st.session_state.avg_time_hommes_str} "
+            f"<span style='font-size: 16px; color: gray;'>({st.session_state.pace_hommes_str})</span></div>",
             unsafe_allow_html=True
         )
 
@@ -80,20 +71,12 @@ def display_general_metrics(filtered_data, data):
         st.image("assets/femme.png", width=80)
         st.metric(label="Nombre de femmes", value=st.session_state.nb_femmes)
         st.markdown(
-            """
-            <div style=" font-size: 14px; margin-bottom: 4px;">
-                Temps moyen femmes
-            </div>
-            """,
+            "<div style='font-size: 14px; margin-bottom: 4px;'>Temps moyen femmes</div>",
             unsafe_allow_html=True
         )
         st.markdown(
-            f"""
-            <div style="font-size: 24px; font-weight: bold;">
-                {st.session_state.avg_time_femmes_str}
-                <span style="font-size: 16px; color: gray;">({st.session_state.pace_femmes_str})</span>
-            </div>
-            """,
+            f"<div style='font-size: 24px; font-weight: bold;'>{st.session_state.avg_time_femmes_str} "
+            f"<span style='font-size: 16px; color: gray;'>({st.session_state.pace_femmes_str})</span></div>",
             unsafe_allow_html=True
         )
 

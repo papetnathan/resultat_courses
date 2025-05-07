@@ -98,6 +98,14 @@ def convert_allure_to_decimal(allure_str):
         return minutes + seconds / 60
     except:
         return None
+    
+def get_sexe(categorie):
+    if isinstance(categorie, str):
+        if categorie.endswith('M'):
+            return 'masculin'
+        elif categorie.endswith('F'):
+            return 'féminin'
+    return 'indéterminé'
 
 def process_athlete_data(rows):
     '''Data prep sur le dataframe des resultats'''
@@ -117,12 +125,14 @@ def process_athlete_data(rows):
     data["allure_decimal"] = data["allure"].apply(convert_allure_to_decimal)
     data['club'] = data['club'].str.upper().str.strip().str.replace(r'\*+$', '', regex=True)
     data['cat'] = data["categorie"].str.slice(0,2)
+    data['sexe'] = data['categorie'].apply(get_sexe)
     data = data.set_index('classement')
     return data.drop(columns=["temps", "time_delta"], errors='ignore')
 
-def apply_filters(data, search_name="", club_filter=None, categorie_filter=None):
-    ''' Fonction pour filtrer le dataframe sur les filtres selectionnés'''
+def apply_filters(data, search_name="", club_filter=None, categorie_filter=None, sexe_filter="tous"):
+    ''' Fonction pour filtrer le dataframe sur les filtres sélectionnés'''
     filtered_data = data.copy()
+
     if search_name:
         filtered_data = filtered_data[
             filtered_data['nom_athlete'].str.contains(search_name, case=False, na=False)
@@ -134,7 +144,10 @@ def apply_filters(data, search_name="", club_filter=None, categorie_filter=None)
 
     if categorie_filter:
         if isinstance(categorie_filter, list) and len(categorie_filter) > 0:
-            filtered_data = filtered_data[filtered_data['categorie'].isin(categorie_filter)]
+            filtered_data = filtered_data[filtered_data['cat'].isin(categorie_filter)]
+
+    if sexe_filter:
+        filtered_data = filtered_data[filtered_data['sexe'].isin(sexe_filter)]
 
     return filtered_data
 

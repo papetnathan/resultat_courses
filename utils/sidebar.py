@@ -56,12 +56,13 @@ def display_sidebar(metadata, data):
 
         st.session_state.epreuve_selectionnee = epreuve_selectionnee
         data_epreuve = data[data['epreuve'] == epreuve_selectionnee]
+        sexe_filter = st.multiselect("Filtrer par sexe :", options=sorted(data_epreuve['sexe'].dropna().unique()), default=[])
+        categorie_filter = st.multiselect("Filtrer par catégorie", options=sorted(data_epreuve['cat'].dropna().unique()), default=[])
+        club_filter = st.multiselect("Filtrer par club", options=sorted(data_epreuve['club'].dropna().unique()), default=[])
         noms_uniques = sorted(data_epreuve["nom_athlete"].dropna().unique())
         search_name = st.selectbox("Rechercher un athlète", options=[""] + noms_uniques)
-        club_filter = st.multiselect("Filtrer par club", options=sorted(data_epreuve['club'].dropna().unique()), default=[])
-        categorie_filter = st.multiselect("Filtrer par catégorie", options=sorted(data_epreuve['categorie'].dropna().unique()), default=[])
 
-    filtered_data = apply_filters(data_epreuve, search_name, club_filter, categorie_filter)
-    filtered_data_course = apply_filters(data_epreuve, None, club_filter, categorie_filter)
+    filtered_data = apply_filters(data_epreuve, search_name, club_filter, categorie_filter, sexe_filter)
+    filtered_data_course = apply_filters(data_epreuve, None, club_filter, categorie_filter, sexe_filter)
 
     return filtered_data, filtered_data_course, data_epreuve, coord_course

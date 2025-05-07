@@ -1,7 +1,6 @@
 - boxplot des temps par catégorie
-- juste au dessus du df ajouter un moyen de pouvoir rentrer un temps ou une allure et ca nous donne le classement qu'on aurait eu (ou chatbot)
-- enlever le * a la fin des noms de clubs    
-
+- juste au dessus du df ajouter un moyen de pouvoir rentrer un temps ou une allure et ca nous donne le classement qu'on aurait eu
+- (ou ajouter un llm dans un st.chat pour discuter à propos de cette course)
 
 
 IDEES AUTRES PROJETS :

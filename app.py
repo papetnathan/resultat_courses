@@ -74,10 +74,7 @@ if st.session_state.metadata and st.session_state.data is not None:
     if coord_course is not None:
         st.map(coord_course, use_container_width=True, height=200)
 
-    from utils.metrics import display_general_metrics
-    from utils.graph import plot_time_distribution
-
-    display_general_metrics(filtered_data, data_epreuve)
+    display_general_metrics(data_epreuve)
 
     if filtered_data.empty:
         st.warning("❌ Aucun athlète ne correspond aux filtres sélectionnés.")
