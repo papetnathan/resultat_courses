@@ -9,6 +9,7 @@ from utils.lottie_loader import load_lottiefile
 import time
 from utils.chat import display_chat
 from utils.sidebar import display_sidebar
+from utils.ranking_calcul import display_ranking_calcul
 
 st.set_page_config(layout="wide")
 
@@ -76,6 +77,13 @@ if st.session_state.metadata and st.session_state.data is not None:
 
     display_general_metrics(data_epreuve)
 
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.subheader("📋 Résultats détaillés")
+    data_to_display = filtered_data[['nom_athlete', 'categorie', 'club', 'h_duration','allure']]
+    data_to_display.columns = ['Nom Prénom', 'Catégorie', 'Club', 'Temps','Allure']
+    st.dataframe(data_to_display, use_container_width=True)
+
     if filtered_data.empty:
         st.warning("❌ Aucun athlète ne correspond aux filtres sélectionnés.")
         fig = None
@@ -88,6 +96,4 @@ if st.session_state.metadata and st.session_state.data is not None:
     if fig:
         st.plotly_chart(fig, use_container_width=True)
 
-    filtered_data = filtered_data[['nom_athlete', 'categorie', 'club', 'h_duration','allure']]
-    filtered_data.columns = ['Nom Prénom', 'Catégorie', 'Club', 'Temps','Allure']
-    st.dataframe(filtered_data, use_container_width=True)
+    display_ranking_calcul(filtered_data,filtered_data['distance_m'].iloc[0])

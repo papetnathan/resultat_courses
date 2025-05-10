@@ -1,6 +1,6 @@
 - boxplot des temps par catégorie
-- juste au dessus du df ajouter un moyen de pouvoir rentrer un temps ou une allure et ca nous donne le classement qu'on aurait eu
-- (ou ajouter un llm dans un st.chat pour discuter à propos de cette course)
+- Mettre le csv d'url de courses sur un drive pour pouvoir le mettre a jour facilement depuis l'appli
+- Ajouter le record perso de chaque personne au df si c'est faisable
 
 
 IDEES AUTRES PROJETS :
